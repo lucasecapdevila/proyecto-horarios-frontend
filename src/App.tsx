@@ -4,12 +4,12 @@ import RutasProtegidas from './components/routes/RutasProtegidas';
 import RutasAdmin from './components/routes/RutasAdmin';
 import { Toaster } from 'react-hot-toast';
 import { ModalProvider } from './contexts';
-import { ModalManager } from './components/layout/ModalManager';
 import { Footer, Sidebar } from './components/common';
 import { AuthProvider } from './contexts/AuthContext';
 import { ConfigProvider } from 'antd';
 import es from 'antd/locale/es_ES';
 import { antdTheme } from './config';
+import { ModalManager } from './components/layout';
 
 const App: React.FC = () => {
   return (

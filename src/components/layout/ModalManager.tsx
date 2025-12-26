@@ -1,6 +1,6 @@
 import { Modal } from "antd";
-import { MODAL_COMPONENTS } from "../../../config/modals.config";
-import { useModal } from "../../../hooks/ui";
+import { MODAL_COMPONENTS } from "../../config/modals.config";
+import { useModal } from "../../hooks/ui";
 
 const ModalManager: React.FC = () => {
   const { currentModal, modalData, closeModal } = useModal();
