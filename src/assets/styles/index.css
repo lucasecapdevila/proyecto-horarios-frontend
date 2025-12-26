@@ -1,32 +1,139 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
 
-body, 
+body,
 .ant-menu {
-    font-family: 'Montserrat', sans-serif;
-  }
-  
-  #root {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background: var(--color-background);
+  font-family: 'Montserrat', sans-serif;
 }
 
-@layer utilities{
-  :root{
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+@layer utilities {
+  :root {
     --color-brand: #0c5392;
     --color-secondary: #f9c74e;
     --color-background: #f8f9fa;
     --color-primary-text: #1a1a1a;
     --color-secondary-text: #6c757d;
+
+    --brand-50: #e6f0f9;
+    --brand-100: #cce1f3;
+    --brand-500: #0c5392;
+    --brand-600: #0a4275;
+    --brand-700: #083258;
+
+    /* Success */
+    --success-50: #f0fdf4;
+    --success-500: #10b981;
+    --success-600: #059669;
+
+    /* Error */
+    --error-50: #fef2f2;
+    --error-500: #ef4444;
+    --error-600: #dc2626;
+
+    /* Warning */
+    --warning-50: #fffbeb;
+    --warning-500: #f59e0b;
+    --warning-600: #d97706;
+
+    /* Grises */
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-900: #1f2937;
   }
 
-  .bg-brand{ background-color: var(--color-brand); }
-  .bg-secondary{ background-color: var(--color-secondary); }
-  .bg-background{ background-color: var(--color-background); }
-  .text-primary-text{ color: var(--color-primary-text); }
-  .text-secondary-text{ color: var(--color-secondary-text); }
+  .bg-brand {
+    background-color: var(--color-brand);
+  }
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
+  .bg-background {
+    background-color: var(--color-background);
+  }
+  .text-primary-text {
+    color: var(--color-primary-text);
+  }
+  .text-secondary-text {
+    color: var(--color-secondary-text);
+  }
+
+  /* Clases de utilidad existentes (mantener) */
+  .bg-brand {
+    background-color: var(--color-brand);
+  }
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
+  .bg-background {
+    background-color: var(--color-background);
+  }
+  .text-primary-text {
+    color: var(--color-primary-text);
+  }
+  .text-secondary-text {
+    color: var(--color-secondary-text);
+  }
+
+  /* Nuevas clases de utilidad */
+  .bg-brand-50 {
+    background-color: var(--brand-50);
+  }
+  .bg-brand-100 {
+    background-color: var(--brand-100);
+  }
+  .bg-success-50 {
+    background-color: var(--success-50);
+  }
+  .bg-error-50 {
+    background-color: var(--error-50);
+  }
+  .bg-warning-50 {
+    background-color: var(--warning-50);
+  }
+
+  .text-brand {
+    color: var(--color-brand);
+  }
+  .text-success {
+    color: var(--success-500);
+  }
+  .text-error {
+    color: var(--error-500);
+  }
+  .text-warning {
+    color: var(--warning-500);
+  }
+  .text-gray-500 {
+    color: var(--gray-500);
+  }
+  .text-gray-600 {
+    color: var(--gray-600);
+  }
+  .text-gray-700 {
+    color: var(--gray-700);
+  }
+
+  .border-brand {
+    border-color: var(--color-brand);
+  }
+  .border-gray-200 {
+    border-color: var(--gray-200);
+  }
+  .border-gray-300 {
+    border-color: var(--gray-300);
+  }
 }
 
 .ant-radio-button-wrapper.ant-radio-button-wrapper-checked {
@@ -36,6 +143,24 @@ body,
 }
 
 .ant-list-item {
-  padding-top: 0 !important; 
-  padding-bottom: 0 !important; 
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Mejoras de transición */
+.transition-all {
+  transition: all 200ms ease-in-out;
+}
+
+/* Sombras */
+.shadow-card {
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.shadow-card-hover {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
