@@ -71,6 +71,13 @@ const Admin: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && ['companies', 'stops', 'routes', 'schedules', 'users'].includes(hash)) {
+      setActiveTab(hash);
+    }
+  }, []);
+
   // Carga inicial
   useEffect(() => {
     const initialize = async () => {
