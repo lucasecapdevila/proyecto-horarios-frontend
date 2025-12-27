@@ -29,6 +29,7 @@ import FilterPanel from './FilterPanel';
 import { BulkActionBar, QuickFilters } from './BulkActions';
 import { FormField } from '@/components/common/FormField';
 import { colors } from '@/config';
+import { RouteFormLayout } from '../routes';
 
 const AdminTable: React.FC<AdminTableProps> = ({
   title,
@@ -60,6 +61,7 @@ const AdminTable: React.FC<AdminTableProps> = ({
     handleSubmit,
     reset,
     setValue,
+    watch,
     validationAlert,
     isValid,
     validateBeforeSubmit,
@@ -523,7 +525,7 @@ const AdminTable: React.FC<AdminTableProps> = ({
       </div>
     </div>
   }
-  width={700}
+  width={endpoint === 'routes' ? 1200 : 700}  // ← MÁS ANCHO PARA RUTAS
   destroyOnHidden
   centered
   className="modal-form-enhanced"
@@ -538,11 +540,22 @@ const AdminTable: React.FC<AdminTableProps> = ({
       />
     )}
 
-    <div className="space-y-1">
-      {formFields.map((field) => (
-        <FormField key={field.name} field={field} control={control} />
-      ))}
-    </div>
+    {/* LAYOUT ESPECIAL PARA RUTAS */}
+    {endpoint === 'routes' ? (
+      <RouteFormLayout
+        formFields={formFields}
+        control={control}
+        watch={watch}
+        setValue={setValue}
+      />
+    ) : (
+      // Layout normal para otras entidades
+      <div className="space-y-1">
+        {formFields.map((field) => (
+          <FormField key={field.name} field={field} control={control} />
+        ))}
+      </div>
+    )}
 
     {/* Info adicional para horarios */}
     {endpoint === 'schedules' && (
