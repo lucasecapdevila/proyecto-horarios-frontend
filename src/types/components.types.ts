@@ -110,15 +110,25 @@ export interface SelectOption {
 //  Props de CascadeDeleteModal
 export interface CascadeDeleteModalProps {
   data: {
-    entityType: "linea" | "recorrido";
+    entityType: 'company' | 'route' | 'stop' | 'schedule';
     id?: number;
-    recorridos_count?: number;
-    horarios_count?: number;
-    recorridos?: any[];
-    horarios_preview?: number[];
+    routesCount?: number;
+    schedulesCount?: number;
+    routes?: any[];
+    schedulesPreview?: number[];
   };
   onConfirm: () => void;
   onCancel: () => void;
+}
+
+export interface CascadeModalData {
+  id: number;
+  entityType: 'company' | 'route' | 'stop' | 'schedule';
+  routesCount?: number;
+  schedulesCount?: number;
+  routes?: any[];
+  schedulesPreview?: number[];
+  [key: string]: any;
 }
 
 //  Props de ModalManager

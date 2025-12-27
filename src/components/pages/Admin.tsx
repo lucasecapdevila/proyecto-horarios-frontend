@@ -4,10 +4,10 @@ import { Tabs, TabsProps } from "antd";
 import { useCrud } from "../../hooks/useCrud";
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import toast from "react-hot-toast";
-import { AdminTable } from "../admin";
 import { Company, Route, Stop, DayOfWeek } from "@/types";
 import { rolesOptions, daysOfWeekOptions } from "@/utils/adminPanelOptions";
 import { AdminLayout } from "../layout";
+import { AdminTable } from "../features/admin";
 
 interface SelectOption {
   label: string;

@@ -1,6 +1,5 @@
 import { Breadcrumb as AntBreadcrumb } from 'antd';
 import type { BreadcrumbItemType } from 'antd/es/breadcrumb/Breadcrumb';
-import { HomeOutlined } from '@ant-design/icons';
 import { Link, useLocation } from 'react-router-dom';
 import { useMemo } from 'react';
 

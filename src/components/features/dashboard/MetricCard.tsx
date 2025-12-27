@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 import { Card } from 'antd';
-import { colors } from '@/config/designTokens';
 
 interface MetricCardProps {
   title: string;
