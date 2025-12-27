@@ -21,8 +21,8 @@ const EmptyState: React.FC<EmptyStateProps> = ({
     <div className="flex flex-col items-center justify-center py-12 px-4">
       <Empty
         image={Empty.PRESENTED_IMAGE_SIMPLE}
-        imageStyle={{
-          height: 80,
+        styles={{
+          image: { height: 80 },
         }}
         description={
           <div className="space-y-3 mt-4">

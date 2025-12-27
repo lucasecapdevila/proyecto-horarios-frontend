@@ -164,3 +164,52 @@ body,
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
+
+/* Estilos mejorados para modales */
+.modal-form-enhanced .ant-modal-header {
+  padding: 24px 24px 0 24px;
+  border-bottom: none;
+}
+
+.modal-form-enhanced .ant-modal-body {
+  padding: 0 24px 24px 24px;
+}
+
+.modal-form-enhanced .ant-modal-footer {
+  padding: 0 24px 24px 24px;
+  border-top: none;
+}
+
+/* Animación suave para validaciones */
+.ant-form-item-explain-error,
+.ant-form-item-explain-success {
+  animation: fadeInUp 0.3s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mejorar inputs con validación */
+.ant-input-status-error,
+.ant-select-status-error .ant-select-selector {
+  border-color: var(--error-500) !important;
+}
+
+.ant-input-status-success,
+.ant-select-status-success .ant-select-selector {
+  border-color: var(--success-500) !important;
+}
+
+/* Hover effect para campos */
+.ant-form-item:hover .ant-input:not(.ant-input-disabled),
+.ant-form-item:hover .ant-select-selector:not(.ant-select-disabled .ant-select-selector) {
+  border-color: var(--brand-500);
+}

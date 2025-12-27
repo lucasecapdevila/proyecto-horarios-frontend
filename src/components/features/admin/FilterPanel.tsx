@@ -45,7 +45,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   );
 
   return (
-    <Card className="mb-4 border-gray-200" bodyStyle={{ padding: '16px' }}>
+    <Card className="mb-4 border-gray-200" styles={{ body: { padding: '16px' } }}>
       <div className="space-y-4">
         {/* Barra principal de búsqueda */}
         <div className="flex flex-wrap gap-3 items-center">

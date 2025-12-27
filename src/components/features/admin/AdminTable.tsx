@@ -9,7 +9,7 @@ import {
   TableProps,
   Card,
 } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { CheckOutlined, DeleteOutlined, EditOutlined, InfoCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 import toast from 'react-hot-toast';
 import { AdminTableProps, CascadeModalData, ApiEndpoint } from '@/types';
@@ -22,11 +22,13 @@ import {
   CascadeDeleteModal,
   EmptyState,
   TableSkeleton,
+  ValidationAlert,
 } from '@/components/common';
 import AdminTableHeader from './AdminTableHeader';
 import FilterPanel from './FilterPanel';
 import { BulkActionBar, QuickFilters } from './BulkActions';
 import { FormField } from '@/components/common/FormField';
+import { colors } from '@/config';
 
 const AdminTable: React.FC<AdminTableProps> = ({
   title,
@@ -461,40 +463,105 @@ const AdminTable: React.FC<AdminTableProps> = ({
 
       {/* Modal de formulario */}
       <Modal
-        title={
-          <div className="text-xl font-semibold">
-            {editing ? `Editar ${title}` : `Nuevo ${title}`}
-          </div>
-        }
-        open={open}
-        onCancel={() => {
-          setOpen(false);
-          clearValidation();
-        }}
-        cancelText="Cancelar"
-        onOk={handleSubmit(onSubmit)}
-        okText={editing ? 'Guardar cambios' : 'Crear'}
-        okButtonProps={{
-          disabled: !isValid,
-        }}
-        width={600}
-        destroyOnHidden
+  title={
+    <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
+      <div
+        className="w-10 h-10 rounded-lg flex items-center justify-center"
+        style={{ backgroundColor: `${colors.brand[500]}15` }}
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-          {validationAlert && (
-            <Alert
-              message={validationAlert.message}
-              type={validationAlert.type}
-              showIcon
-              className="mb-4"
-            />
-          )}
+        {editing ? (
+          <EditOutlined style={{ color: colors.brand[500], fontSize: '20px' }} />
+        ) : (
+          <PlusOutlined style={{ color: colors.brand[500], fontSize: '20px' }} />
+        )}
+      </div>
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900 m-0">
+          {editing ? `Editar ${title}` : `Nuevo ${title}`}
+        </h2>
+        <p className="text-sm text-gray-500 m-0">
+          {editing
+            ? 'Modifica la información del registro'
+            : 'Complete los campos para crear un nuevo registro'}
+        </p>
+      </div>
+    </div>
+  }
+  open={open}
+  onCancel={() => {
+    setOpen(false);
+    clearValidation();
+  }}
+  footer={
+    <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+      <div className="text-xs text-gray-500">
+        {formFields.filter(f => f.rules?.required).length > 0 && (
+          <span>
+            <span className="text-error">*</span> Campos obligatorios
+          </span>
+        )}
+      </div>
+      <div className="flex gap-2">
+        <Button
+          onClick={() => {
+            setOpen(false);
+            clearValidation();
+          }}
+          size="large"
+        >
+          Cancelar
+        </Button>
+        <Button
+          type="primary"
+          onClick={handleSubmit(onSubmit)}
+          disabled={!isValid}
+          size="large"
+          icon={editing ? <CheckOutlined /> : <PlusOutlined />}
+        >
+          {editing ? 'Guardar cambios' : 'Crear'}
+        </Button>
+      </div>
+    </div>
+  }
+  width={700}
+  destroyOnHidden
+  centered
+  className="modal-form-enhanced"
+>
+  <form onSubmit={handleSubmit(onSubmit)} className="py-4">
+    {validationAlert && (
+      <ValidationAlert
+        type={validationAlert.type}
+        message={validationAlert.message}
+        closable
+        onClose={clearValidation}
+      />
+    )}
 
-          {formFields.map((field) => (
-            <FormField key={field.name} field={field} control={control} />
-          ))}
-        </form>
-      </Modal>
+    <div className="space-y-1">
+      {formFields.map((field) => (
+        <FormField key={field.name} field={field} control={control} />
+      ))}
+    </div>
+
+    {/* Info adicional para horarios */}
+    {endpoint === 'schedules' && (
+      <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="flex gap-2">
+          <InfoCircleOutlined className="text-brand mt-0.5" />
+          <div className="text-xs text-gray-600">
+            <p className="font-medium text-gray-700 mb-1">Nota sobre horarios:</p>
+            <ul className="list-disc list-inside space-y-0.5">
+              <li>La duración del viaje debe estar entre 5 minutos y 10 horas</li>
+              <li>Se permite paso de medianoche (ej: 23:00 - 01:00)</li>
+              <li>Debes seleccionar al menos un día de operación</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    )}
+  </form>
+</Modal>
 
       {/* Modal de eliminación masiva */}
       <Modal
