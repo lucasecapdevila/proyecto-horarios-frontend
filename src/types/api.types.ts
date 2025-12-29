@@ -1,4 +1,4 @@
-import { User, DayOfWeek } from "./models.types";
+import { User } from "./models.types";
 
 // Type Definitions
 export type ApiEndpoint = 
@@ -56,7 +56,7 @@ export interface DeleteResult {
   conflict_data?: {
     recorridos_count?: number
     horarios_count?: number
-    recorridos?: Recorrido[]
+    recorridos?: any[]
     horarios_preview?: number[]
   }
   id: number

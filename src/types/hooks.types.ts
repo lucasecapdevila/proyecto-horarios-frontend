@@ -5,6 +5,20 @@ import { DayOfWeek, Route, Schedule, Stop, ScheduleFilters } from "./models.type
 export type FilterType = 'habil' | 'sabado' | 'domingo' | 'directos' | 'linea' | 'recorrido' | 'all' | 'clear' | 'clearAll';
 export type SelectionMode = 'add' | 'remove';
 
+// Record de horario para tablas administrativas
+export interface ScheduleRecord {
+  id: number;
+  tipo_dia: 'habil' | 'sábado' | 'domingo';
+  directo: boolean;
+  linea_nombre: string;
+  recorrido_id: number;
+  origen: string;
+  destino: string;
+  hora_salida: string;
+  hora_llegada: string;
+  [key: string]: any;
+}
+
 // Re-export ScheduleFilters desde models.types para consistencia
 export type { ScheduleFilters };
 
