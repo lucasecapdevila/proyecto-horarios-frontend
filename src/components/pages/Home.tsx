@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useCrud } from "../../hooks/useCrud";
 import { Button, Form, Select, Radio, TimePicker } from "antd";
 import { FadeLoader } from "react-spinners";
 import dayjs from "dayjs";
 import ResultadosHorarios from "../home/ResultadosHorarios";
 import toast from "react-hot-toast";
-import { SearchData, SearchFormData } from "@/types";
-import { Stop } from "@/types/models/models.types";
+import { SearchData, SearchFormData, Stop } from "@/types";
 import api from "@/services/api";
 
 const Home: React.FC = () => {

@@ -133,5 +133,9 @@ export const formatDuration = (minutes: number): string => {
 
 // Detecta si un viaje cruza medianoche
 export const crossesMidnight = (horaSalida: string, horaLlegada: string): boolean => {
-  return addMinutes(horaLlegada) < addMinutes(horaSalida);
+  const [salidaH, salidaM] = horaSalida.split(':').map(Number);
+  const [llegadaH, llegadaM] = horaLlegada.split(':').map(Number);
+  const salidaTotal = salidaH * 60 + salidaM;
+  const llegadaTotal = llegadaH * 60 + llegadaM;
+  return llegadaTotal < salidaTotal;
 };

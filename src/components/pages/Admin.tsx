@@ -4,9 +4,10 @@ import { Tabs, TabsProps } from "antd";
 import { useCrud } from "../../hooks/useCrud";
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import toast from "react-hot-toast";
-import { AdminTable } from "../admin";
 import { Company, Route, Stop, DayOfWeek } from "@/types";
 import { rolesOptions, daysOfWeekOptions } from "@/utils/adminPanelOptions";
+import { AdminLayout } from "../layout";
+import { AdminTable } from "../features/admin";
 
 interface SelectOption {
   label: string;
@@ -24,7 +25,6 @@ const Admin: React.FC = () => {
   const { getAll: getAllRoutes } = useCrud<Route>('routes');
   const { getAll: getAllStops } = useCrud<Stop>('stops');
 
-  // Cargar opciones de empresas/compañías
   const loadCompaniesOptions = async () => {
     try {
       const companies = await getAllCompanies();
@@ -71,6 +71,13 @@ const Admin: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && ['companies', 'stops', 'routes', 'schedules', 'users'].includes(hash)) {
+      setActiveTab(hash);
+    }
+  }, []);
+
   // Carga inicial
   useEffect(() => {
     const initialize = async () => {
@@ -110,7 +117,6 @@ const Admin: React.FC = () => {
           title='Empresas'
           endpoint='companies'
           columns={[
-            { title: "ID", dataIndex: "id" },
             { 
               title: "Nombre", 
               dataIndex: "name", 
@@ -154,7 +160,6 @@ const Admin: React.FC = () => {
           title='Paradas'
           endpoint='stops'
           columns={[
-            { title: "ID", dataIndex: "id" },
             { 
               title: "Nombre", 
               dataIndex: "name", 
@@ -192,7 +197,6 @@ const Admin: React.FC = () => {
           title='Rutas'
           endpoint='routes'
           columns={[
-            { title: "ID", dataIndex: "id" },
             { 
               title: "Nombre", 
               dataIndex: "name", 
@@ -238,7 +242,6 @@ const Admin: React.FC = () => {
           title='Horarios'
           endpoint='schedules'
           columns={[
-            { title: "ID", dataIndex: "id" },
             { 
               title: "Ruta", 
               dataIndex: ["route", "name"], 
@@ -290,7 +293,6 @@ const Admin: React.FC = () => {
           title='Usuarios'
           endpoint='users'
           columns={[
-            { title: "ID", dataIndex: "id" },
             { 
               title: "Nombre", 
               dataIndex: "name", 
@@ -322,28 +324,36 @@ const Admin: React.FC = () => {
   ];
 
   return (
-    <main className="w-full max-w-5xl mx-auto px-2 sm:px-6 py-8 pt-12 flex flex-col gap-4">
-      <h1 className="text-2xl sm:text-3xl font-bold text-primary-text text-center mt-2 mb-4">
-        Panel de Administración
-      </h1>
-      {isLoading ? (
-        <div className="w-full flex justify-center items-center py-12">
-          <FadeLoader color="#0c5392" loading={isLoading} />
+    <AdminLayout>
+      <div className="space-y-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900">
+            Panel de Administración
+          </h1>
+          <p className="mt-2 text-gray-600">
+            Gestión integral del sistema de transporte
+          </p>
         </div>
-      ) : (
-        <div className="w-full">
-          <Tabs
-            activeKey={activeTab}
-            onChange={handleTabChange}
-            items={items}
-            type="card"
-            tabBarGutter={16}
-            className="bg-background rounded-lg shadow-md px-1 w-full"
-            style={{overflowX:'auto', minWidth: '350px', width: '100%'}}
-          />
-        </div>
-      )}
-    </main>
+
+        {isLoading ? (
+          <div className="w-full flex justify-center items-center py-12">
+            <FadeLoader color="#0c5392" loading={isLoading} />
+          </div>
+        ) : (
+          <div className="w-full">
+            <Tabs
+              activeKey={activeTab}
+              onChange={handleTabChange}
+              items={items}
+              type="card"
+              tabBarGutter={16}
+              className="rounded-lg shadow-sm border border-gray-200 p-4"
+              style={{ overflowX: 'auto', minWidth: '350px', width: '100%', borderTop: 'none' }}
+            />
+          </div>
+        )}
+      </div>
+    </AdminLayout>
   );
 };
 

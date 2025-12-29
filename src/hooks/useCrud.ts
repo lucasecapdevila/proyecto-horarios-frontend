@@ -62,7 +62,7 @@ export const useCrud = <T = any>(endpoint: ApiEndpoint): UseCrudReturn<T> => {
 
   //  PUT - Editar un registro
   const update = useCallback(
-    async (id: number, updatedData: Partial<T>): Promise<T> => {
+    async (id: string | number, updatedData: Partial<T>): Promise<T> => {
       try {
         setLoading(true);
         setError(null);

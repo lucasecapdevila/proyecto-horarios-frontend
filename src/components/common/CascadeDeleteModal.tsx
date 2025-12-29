@@ -1,116 +1,104 @@
-import { Alert, Button, Divider, Modal, Typography } from "antd";
-import { ArrowRightOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import { Alert, List, Modal, Tag } from "antd";
+import { WarningOutlined } from "@ant-design/icons";
 import { CascadeDeleteModalProps } from "@/types";
 
-const { Text, Paragraph } = Typography;
-
 const CascadeDeleteModal: React.FC<CascadeDeleteModalProps> = ({ data, onConfirm, onCancel }) => {
-  const entityType = data?.entityType || "linea";
-  const isLinea = entityType === 'linea';
+  const { entityType, routesCount, schedulesCount, routes, schedulesPreview } = data;
+
+  const entityNames = {
+    company: { singular: 'empresa', plural: 'empresas' },
+    route: { singular: 'ruta', plural: 'rutas' },
+    stop: { singular: 'parada', plural: 'paradas' },
+    schedule: { singular: 'horario', plural: 'horarios' },
+  };
+
+  const currentEntity = entityNames[entityType];
 
   return (
     <Modal
-      open={true}
-      onCancel={onCancel}
-      footer={null}
-      width={600}
       title={
-        <div className="flex items-center gap-2">
-          <ExclamationCircleOutlined style={{ color: "#faad14", fontSize: 22 }} />
-          <span>Eliminación masiva</span>
+        <div className="flex items-center gap-2 text-lg">
+          <WarningOutlined className="text-warning" />
+          <span>Confirmar Eliminación en Cascada</span>
         </div>
       }
-      maskClosable={false}
+      open={true}
+      onOk={onConfirm}
+      onCancel={onCancel}
+      okText="Sí, eliminar todo"
+      cancelText="Cancelar"
+      okButtonProps={{ danger: true }}
+      width={600}
     >
-      <div className="space-y-4 mt-2">
+      <div className="space-y-4 mt-4">
         <Alert
           type="warning"
           showIcon
-          message="Esta acción eliminará de forma permanente los datos relacionados."
-          description={
-            <div className="mt-2 space-y-1">
-              {isLinea && (
-                <>
-                  <Text strong className="block">
-                    {data?.recorridos_count ?? 0} recorridos
-                  </Text>
-                  <Text strong className="block">
-                    {data?.horarios_count ?? 0} horarios
-                  </Text>
-                </>
-              )}
-              {!isLinea && (
-                <Text strong className="block">
-                  {data?.horarios_count ?? 0} horarios
-                </Text>
-              )}
-            </div>
-          }
+          message="Esta operación eliminará elementos relacionados"
+          description={`Al eliminar esta ${currentEntity.singular}, se eliminarán permanentemente los elementos asociados.`}
         />
 
-        {/* Recorridos afectados */}
-        {isLinea && (data?.recorridos?.length ?? 0) > 0 && (
-          <>
-            <Divider />
-
-            <div className="max-h-60 overflow-y-auto border rounded p-3 bg-gray-50">
-              <Paragraph strong className="mb-2">
-                Recorridos que serán eliminados:
-              </Paragraph>
-
-              {data?.recorridos?.map((rec) => (
-                <Paragraph key={rec.id} className="text-sm mb-1">
-                  <Text code>ID {rec.id}</Text> – {rec.origen}{" "}
-                  <ArrowRightOutlined /> {rec.destino}
-                </Paragraph>
-              ))}
-            </div>
-          </>
+        {/* Mostrar rutas afectadas */}
+        {routesCount !== undefined && routesCount > 0 && (
+          <div>
+            <p className="font-semibold text-gray-900 mb-2">
+              Rutas que se eliminarán: {routesCount}
+            </p>
+            {routes && routes.length > 0 && (
+              <List
+                size="small"
+                bordered
+                dataSource={routes}
+                renderItem={(route: any) => (
+                  <List.Item>
+                    <span className="text-gray-700">{route.name || `Ruta #${route.id}`}</span>
+                    <Tag color="orange">Ruta</Tag>
+                  </List.Item>
+                )}
+                style={{ maxHeight: '200px', overflow: 'auto' }}
+              />
+            )}
+          </div>
         )}
 
-        {/* Preview horarios */}
-        {!isLinea && (data?.horarios_preview?.length ?? 0) > 0 && (
-          <>
-            <Divider />
-
-            <div className="max-h-60 overflow-y-auto border rounded p-3 bg-gray-50">
-              <Paragraph strong className="mb-2">
-                Primeros 10 horarios que serán eliminados:
-              </Paragraph>
-
-              <div className="flex flex-wrap gap-1">
-                {data?.horarios_preview?.map((id) => (
-                  <Text key={id} code className="text-xs">
-                    ID {id}
-                  </Text>
+        {/* Mostrar horarios afectados */}
+        {schedulesCount !== undefined && schedulesCount > 0 && (
+          <div>
+            <p className="font-semibold text-gray-900 mb-2">
+              Horarios que se eliminarán: {schedulesCount}
+            </p>
+            {schedulesPreview && schedulesPreview.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {schedulesPreview.map((scheduleId) => (
+                  <Tag key={scheduleId} color="red">
+                    Horario #{scheduleId}
+                  </Tag>
                 ))}
+                {schedulesCount > schedulesPreview.length && (
+                  <Tag>+{schedulesCount - schedulesPreview.length} más</Tag>
+                )}
               </div>
-
-              {(data?.horarios_count ?? 0) >
-                (data?.horarios_preview?.length ?? 0) && (
-                <Paragraph className="text-xs text-gray-500 mt-2 mb-0">
-                  ... y {(data?.horarios_count ?? 0) - (data?.horarios_preview?.length ?? 0)} más
-                </Paragraph>
-              )}
-            </div>
-          </>
+            )}
+          </div>
         )}
 
+        {/* Advertencia final */}
         <Alert
           type="error"
           showIcon
-          message="Esta acción no se puede deshacer."
-          className="mt-3"
+          message="Esta acción no se puede deshacer"
+          description="Una vez confirmada la eliminación, todos los datos asociados se perderán permanentemente."
         />
 
-        <div className="flex justify-end gap-2 mt-5">
-          <Button className="ant-btn" onClick={onCancel}>
-            Cancelar
-          </Button>
-
-          <Button danger type="primary" onClick={onConfirm}>
-            Confirmar eliminación
-          </Button>
+        <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+          <p className="text-sm text-gray-600">
+            <strong>Resumen:</strong>
+          </p>
+          <ul className="text-sm text-gray-600 mt-2 space-y-1">
+            <li>• Se eliminará 1 {currentEntity.singular}</li>
+            {routesCount ? <li>• Se eliminarán {routesCount} {routesCount === 1 ? 'ruta' : 'rutas'}</li> : null}
+            {schedulesCount ? <li>• Se eliminarán {schedulesCount} {schedulesCount === 1 ? 'horario' : 'horarios'}</li> : null}
+          </ul>
         </div>
       </div>
     </Modal>

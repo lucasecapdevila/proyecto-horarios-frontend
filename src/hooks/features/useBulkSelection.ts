@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import type { QuickSelectResult, UseBulkSelectionReturn, HorarioRecord, FilterType, SelectionMode } from '@/types';
+import type { QuickSelectResult, UseBulkSelectionReturn, ScheduleRecord, FilterType, SelectionMode } from '@/types';
 
 interface FilterConfig {
   key: string;
   label: string;
-  filter: (record: HorarioRecord) => boolean;
+  filter: (record: ScheduleRecord) => boolean;
 }
 
 const FILTER_CONFIG = {
@@ -12,33 +12,33 @@ const FILTER_CONFIG = {
     {
       key: 'habil',
       label: 'Días hábiles',
-      filter: (r: HorarioRecord) => r.tipo_dia === 'habil',
+      filter: (r: ScheduleRecord) => r.tipo_dia === 'habil',
     },
-    { key: 'sabado', label: 'Sábados', filter: (r: HorarioRecord) => r.tipo_dia === 'sábado' },
+    { key: 'sabado', label: 'Sábados', filter: (r: ScheduleRecord) => r.tipo_dia === 'sábado' },
     {
       key: 'domingo',
       label: 'Domingos',
-      filter: (r: HorarioRecord) => r.tipo_dia === 'domingo',
+      filter: (r: ScheduleRecord) => r.tipo_dia === 'domingo',
     },
   ] as FilterConfig[],
   byAttribute: [
-    { key: 'directos', label: 'Directos', filter: (r: HorarioRecord) => r.directo === true },
+    { key: 'directos', label: 'Directos', filter: (r: ScheduleRecord) => r.directo === true },
   ] as FilterConfig[],
   dynamic: {
     byLine: (lineaNombre: string): FilterConfig => ({
       key: `linea-${lineaNombre}`,
       label: lineaNombre,
-      filter: (r: HorarioRecord) => r.linea_nombre === lineaNombre,
+      filter: (r: ScheduleRecord) => r.linea_nombre === lineaNombre,
     }),
     byRoute: (recorridoId: number, label: string): FilterConfig => ({
       key: `recorrido-${recorridoId}`,
       label,
-      filter: (r: HorarioRecord) => r.recorrido_id === recorridoId,
+      filter: (r: ScheduleRecord) => r.recorrido_id === recorridoId,
     }),
   },
 };
 
-const useBulkSelection = (data: HorarioRecord[] = []): UseBulkSelectionReturn => {
+const useBulkSelection = (data: ScheduleRecord[] = []): UseBulkSelectionReturn => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
 
   const handleQuickSelect = (filterType: FilterType, filterValue?: string | number, mode: SelectionMode = 'add'): QuickSelectResult => {
@@ -55,7 +55,7 @@ const useBulkSelection = (data: HorarioRecord[] = []): UseBulkSelectionReturn =>
         const config = FILTER_CONFIG.byDayType.find(
           (f) => f.key === filterType,
         );
-        if (config) filtered = data.filter(config.filter).map((r: HorarioRecord) => r.id);
+        if (config) filtered = data.filter(config.filter).map((r: ScheduleRecord) => r.id);
         break;
       }
 
@@ -63,7 +63,7 @@ const useBulkSelection = (data: HorarioRecord[] = []): UseBulkSelectionReturn =>
         const config = FILTER_CONFIG.byAttribute.find(
           (f) => f.key === 'directos',
         );
-        if (config) filtered = data.filter(config.filter).map((r: HorarioRecord) => r.id);
+        if (config) filtered = data.filter(config.filter).map((r: ScheduleRecord) => r.id);
         break;
       }
 
@@ -71,7 +71,7 @@ const useBulkSelection = (data: HorarioRecord[] = []): UseBulkSelectionReturn =>
         if (!filterValue)
           return { success: false, message: 'Debe especificar una línea.' };
         const config = FILTER_CONFIG.dynamic.byLine(String(filterValue));
-        filtered = data.filter(config.filter).map((r: HorarioRecord) => r.id);
+        filtered = data.filter(config.filter).map((r: ScheduleRecord) => r.id);
         break;
       }
 
@@ -79,17 +79,17 @@ const useBulkSelection = (data: HorarioRecord[] = []): UseBulkSelectionReturn =>
         if (!filterValue)
           return { success: false, message: 'Debe especificar un recorrido.' };
         const recorridoId = Number(filterValue);
-        const record = data.find((r: HorarioRecord) => r.recorrido_id === recorridoId);
+        const record = data.find((r: ScheduleRecord) => r.recorrido_id === recorridoId);
         const label = record
           ? `${record.origen} - ${record.destino}`
           : 'Recorrido';
         const config = FILTER_CONFIG.dynamic.byRoute(recorridoId, label);
-        filtered = data.filter(config.filter).map((r: HorarioRecord) => r.id);
+        filtered = data.filter(config.filter).map((r: ScheduleRecord) => r.id);
         break;
       }
 
       case 'all':
-        setSelectedRowKeys(data.map((r: HorarioRecord) => r.id));
+        setSelectedRowKeys(data.map((r: ScheduleRecord) => r.id));
         return { success: true, count: data.length, mode: 'add' };
 
       case 'clear':
@@ -129,7 +129,7 @@ const useBulkSelection = (data: HorarioRecord[] = []): UseBulkSelectionReturn =>
 
   const getUniqueLines = (): string[] => {
     if (!data || data.length === 0) return [];
-    const lines = [...new Set(data.map((r: HorarioRecord) => r.linea_nombre).filter(Boolean))];
+    const lines = [...new Set(data.map((r: ScheduleRecord) => r.linea_nombre).filter(Boolean))];
     return lines.sort();
   };
 
@@ -137,7 +137,7 @@ const useBulkSelection = (data: HorarioRecord[] = []): UseBulkSelectionReturn =>
     if (!data || data.length === 0) return [];
     const routesMap = new Map<number, { key: number; label: string }>();
 
-    data.forEach((r: HorarioRecord) => {
+    data.forEach((r: ScheduleRecord) => {
       if (r.recorrido_id && r.origen && r.destino) {
         routesMap.set(r.recorrido_id, {
           key: r.recorrido_id,

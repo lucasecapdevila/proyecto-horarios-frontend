@@ -3,3 +3,4 @@ export { default as Help } from "./Help";
 export { default as Contact } from "./Contact";
 export { default as Login } from "./Login";
 export { default as Admin } from "./Admin";
+export { default as Dashboard } from "./Dashboard";
